@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ARM - HRM Documentation</title>
+    <link rel="stylesheet" href="https://unpkg.com/docute@4/dist/docute.css">
+  </head>
+  <body>
+    <div id="docute"></div>
+    <script src="https://unpkg.com/docute@4/dist/docute.js"></script>
+    <script>
+      new Docute({
+        target: '#docute',
+        detectSystemDarkTheme: true,
+        darkThemeToggler: true,
+        nav: [
+          {
+            title: 'Home',
+            link: '/'
+          },
+          {
+            title: 'GitHub',
+            link: 'https://github.com/Media24si/arm-hrm/'
+          },
+        ],
+        sidebar: [
+          {
+            title: 'Installation',
+            link: '/installation'
+          },
+          {
+            title: 'Project',
+            children: [
+              {
+                title: 'Technologies',
+                link: '/project/technologies'
+              },
+            ]
+          },
+          {
+            title: 'GitHub',
+            link: 'https://github.com/Media24si/arm-hrm/'
+          },
+          {
+            title: 'Media24 Guidelines',
+            link: 'https://guidelines.m24.dev/'
+          },
+        ]
+      })
+    </script>
+  </body>
+</html>
