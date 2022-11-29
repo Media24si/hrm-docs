@@ -17,6 +17,8 @@ curl -s "https://laravel.build/arm-hrm?with=mysql,redis" | bash
 
 If you create a repository through the above example, most of the grunt work will be done for you automatically (copying the .env.example file, installing composer dependencies, ...).
 
+### Modifying the env
+
 You can check the `.env` file and modify the database connection info. Personally we like to add a custom port for Sail through the .env file with the `APP_PORT` variable.
 
 ```bash
@@ -24,12 +26,12 @@ APP_URL="http://localhost:8080"
 APP_PORT="8080"
 ```
 
-### Important!
+#### Important!
 
 Delete all base laravel migrations from your repository.
 The migrations can be found in the `database/migrations` folder. This usually includes the users, password_resets, failed_jobs and personal_access_tokens tables. Not deleting those files will result in issues migrating the starting database.
 
-## ARM package
+### ARM package
 Download the `arm` project into the same parent directory as your new project repository.
 
 As per the ARM readme file, add the required variables to the project's `.env` file.
@@ -67,7 +69,7 @@ Add the arm path to the `composer.json` file, under
 ],
 ```
 
-## Finishing touches and commands
+### Finishing touches and commands
 
 Modify your `User.php` model file, by extending the user with the ARM user class.
 
@@ -101,3 +103,49 @@ User::create(['email' => 'user@example.dev', 'name' => 'Test User', 'password' =
 ```
 
 Login inside the project with the use of this route `/dev/login/{user_id}`. We will provide access to the `login` package and environment, should it become neccessary, but currently we are all using this route to login, since it shortens the dev time, and the route allows you to login as any user, for testing purposes.
+
+## Existing repository
+
+Install the required dependencies through composer with the following command:
+
+```bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -v $(pwd)/../arm:/var/www/arm \
+    -w /var/www/html \
+    laravelsail/php81-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+Copy the `.env.example` file to `.env` with: `cp .env.example .env`.
+
+Download the `arm` project into the same parent directory as your project repository.
+
+The next section will presume you have set up a [shell alias for sail](https://laravel.com/docs/master/sail#configuring-a-shell-alias). If not, use `./vendor/bin/sail` instead of `sail`.
+
+Run the development environment with `sail up`.
+
+Generate a new application key with `sail artisan key:generate`.
+
+Run the following command to create run the database migrations: `sail artisan migrate`.
+
+Install the frontend dependencies with `sail npm install` and `sail npm run dev` .
+
+Create a test user either through the database or with tinker through `sail artisan tinker`
+
+```php
+User::create(['email' => 'user@example.dev', 'name' => 'Test User', 'password' => \Hash::make('password')]);
+```
+
+Login inside the project with the use of this route `/dev/login/{user_id}`. We will provide access to the `login` package and environment, should it become neccessary, but currently we are all using this route to login, since it shortens the dev time, and the route allows you to login as any user, for testing purposes.
+
+## Running the application
+
+### Development
+
+Since default Laravel apps are now bundled with Vite instead of Mix, you need to keep the watcher running for build files to work correctly (through `sail npm run dev`). The Vite ports are already forwarded by default in the docker YAML file.
+
+### Building
+
+`sail npm run build`
