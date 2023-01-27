@@ -380,3 +380,62 @@ Example use:
     </div>
 </nav>
 ```
+
+## Select2 Laravel Component
+
+Usage examples
+
+## Select with data in component
+```html
+<x-select2 class="mt-1" id="type" model="activity.type">
+  <option value="-1">{{ __('Selection') }}</option>
+  @foreach ($types as $type_id => $type_name)
+      <option value="{{ $type_id }}" {{ $type_id === $activity->type ? 'selected' : '' }}>
+          {{ __($type_name) }}
+      </option>
+  @endforeach
+</x-select2>
+```
+
+## Select with API endpoint autocomplete
+```html
+<x-select2 id="media_issue_id"
+    model="mediaIssueId"
+    endpoint="/api/select2/media-issues">
+</x-select2>
+```
+
+## Select with API endpoint autocomplete and parent filtering
+```html
+<x-select2 id="media_issue_id"
+    model="mediaIssueId"
+    parent_id="media_type_id"
+    endpoint="/api/select2/media-issues">
+</x-select2>
+```
+
+## Select with API endpoint autocomplete and clearing other selects on change
+```html
+<x-select2 id="media_issue_id"
+    model="mediaIssueId"
+    parent_id="media_type_id"
+    endpoint="/api/select2/media-issues">
+    <x-slot name="onChange">
+        $('#advert_type_id').val(null).trigger('change');
+    </x-slot>
+</x-select2>
+```
+
+## Multiple select with api endpoint data
+```html
+<x-select2 class="mt-1"
+    id="filter_agencyId"
+    endpoint="/api/select2/customers"
+    :allow-clear="true"
+    :multiple="true"
+    model="agencyId">
+    @foreach($filterSelectedAgencies as $agency)
+        <option value="{{ $agency->id }}" selected>{{ $agency->title }}</option>
+    @endforeach
+</x-select2>
+```
